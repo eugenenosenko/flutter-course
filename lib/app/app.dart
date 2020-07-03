@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterportoflioapp/pages/landing_page/landing_page.dart';
+import 'package:flutterportoflioapp/pages/gmail_page/gmail_page.dart';
+// import 'package:flutterportoflioapp/pages/landing_page/landing_page.dart';
 
 class AppWrapper extends StatelessWidget {
   @override
@@ -14,7 +15,7 @@ class _MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
-      home: LandingPage(),
+      home: GmailPage(),
     );
   }
 }
