@@ -9,7 +9,11 @@ class GmailPage extends StatefulWidget {
 class _GmailPageState extends State<GmailPage> {
   ScrollController _controller;
   double _composeButtonWidth = 50.0;
+  double _searchBarTopPosition = 10.0;
   Widget _composeButtonText = Container();
+  double _searchBarWidth = 380.0;
+  double _searchBarHeight = 50.0;
+  double _searchBarBorderRadius = 10.0;
 
   @override
   void initState() {
@@ -20,10 +24,12 @@ class _GmailPageState extends State<GmailPage> {
           setState(() {
             _composeButtonWidth = 50.0;
             _composeButtonText = Container();
+            _searchBarTopPosition = -50.0;
           });
         } else if (_controller.position.userScrollDirection ==
             ScrollDirection.forward) {
           setState(() {
+            _searchBarTopPosition = 10.0;
             _composeButtonWidth = 150;
             _composeButtonText = Expanded(
               flex: 3,
@@ -63,17 +69,41 @@ class _GmailPageState extends State<GmailPage> {
     );
   }
 
-  Positioned _buildSearchBar() {
-    return Positioned(
-      top: 10,
-      left: 7,
-      child: Container(
-        width: 380,
-        height: 50,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white,
-            border: Border.all(color: Colors.grey, width: 1.0)),
+  Widget _buildSearchBar() {
+    return AnimatedPositioned(
+      duration: Duration(milliseconds: 200),
+      top: _searchBarTopPosition,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            if (_searchBarHeight == 50) {
+              _searchBarHeight = MediaQuery.of(context).size.height;
+              _searchBarWidth = MediaQuery.of(context).size.width;
+              _searchBarBorderRadius = 0.0;
+              _searchBarTopPosition = 0.0;
+            } else {
+              _searchBarHeight = 50;
+              _searchBarWidth = 380;
+              _searchBarBorderRadius = 10;
+              _searchBarTopPosition = 10;
+            }
+          });
+        },
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            width: _searchBarWidth,
+            height: _searchBarHeight,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(_searchBarBorderRadius),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey, width: 1.0)),
+          ),
+        ),
       ),
     );
   }
