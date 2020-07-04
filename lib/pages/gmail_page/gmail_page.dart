@@ -8,6 +8,8 @@ class GmailPage extends StatefulWidget {
 
 class _GmailPageState extends State<GmailPage> {
   ScrollController _controller;
+  double _composeButtonWidth = 50.0;
+  Widget _composeButtonText = Container();
 
   @override
   void initState() {
@@ -15,10 +17,26 @@ class _GmailPageState extends State<GmailPage> {
       ..addListener(() {
         if (_controller.position.userScrollDirection ==
             ScrollDirection.reverse) {
-          print('Im scrolling in reverse direction');
+          setState(() {
+            _composeButtonWidth = 50.0;
+            _composeButtonText = Container();
+          });
         } else if (_controller.position.userScrollDirection ==
             ScrollDirection.forward) {
-          print('Im scrolling forward');
+          setState(() {
+            _composeButtonWidth = 150;
+            _composeButtonText = Expanded(
+              flex: 3,
+              child: Text(
+                'Compose',
+                softWrap: false,
+                style: TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            );
+          });
         }
       });
     super.initState();
@@ -38,20 +56,24 @@ class _GmailPageState extends State<GmailPage> {
           children: <Widget>[
             _buildEmailTiles(),
             _buildComposeButton(),
-            Positioned(
-              top: 10,
-              left: 7,
-              child: Container(
-                width: 380,
-                height: 50,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 1.0)),
-              ),
-            )
+            _buildSearchBar()
           ],
         ),
+      ),
+    );
+  }
+
+  Positioned _buildSearchBar() {
+    return Positioned(
+      top: 10,
+      left: 7,
+      child: Container(
+        width: 380,
+        height: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.white,
+            border: Border.all(color: Colors.grey, width: 1.0)),
       ),
     );
   }
@@ -60,8 +82,9 @@ class _GmailPageState extends State<GmailPage> {
     return Positioned(
       bottom: 40,
       right: 50,
-      child: Container(
-        width: 50,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        width: _composeButtonWidth,
         height: 50,
         decoration: BoxDecoration(
           boxShadow: [
@@ -73,10 +96,18 @@ class _GmailPageState extends State<GmailPage> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(100.0),
         ),
-        child: Icon(
-          Icons.create,
-          color: Colors.redAccent,
-          size: 26.0,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Icon(
+                Icons.create,
+                color: Colors.redAccent,
+                size: 26.0,
+              ),
+            ),
+            _composeButtonText,
+          ],
         ),
       ),
     );
