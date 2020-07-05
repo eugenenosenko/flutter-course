@@ -218,7 +218,7 @@ class _GmailPageState extends State<GmailPage> {
   static Widget _createMenuIconButton() {
     return IconButton(
       key: ValueKey(Icons.mail.hashCode),
-      icon: Icon(Icons.mail),
+      icon: Icon(Icons.mail, color: Colors.grey.shade600,),
       onPressed: () {},
     );
   }
@@ -226,7 +226,7 @@ class _GmailPageState extends State<GmailPage> {
   static Widget _createBackIconButton() {
     return IconButton(
       key: ValueKey(Icons.arrow_back.hashCode),
-      icon: Icon(Icons.arrow_back),
+      icon: Icon(Icons.arrow_back, color: Colors.grey.shade600,),
       onPressed: () {},
     );
   }
