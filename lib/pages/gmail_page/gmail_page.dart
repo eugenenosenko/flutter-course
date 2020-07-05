@@ -11,6 +11,9 @@ class _GmailPageState extends State<GmailPage> {
   double _composeButtonWidth = 50.0;
   double _searchBarTopPosition = 10.0;
   Widget _composeButtonText = Container();
+  Widget _searchBarLeftIconButton = _createMenuIconButton();
+  Widget _searchBarRightIconButton = _createCircularAvatar();
+
   double _searchBarWidth = 380.0;
   double _searchBarHeight = 50.0;
   double _searchBarBorderRadius = 10.0;
@@ -31,21 +34,25 @@ class _GmailPageState extends State<GmailPage> {
           setState(() {
             _searchBarTopPosition = 10.0;
             _composeButtonWidth = 150;
-            _composeButtonText = Expanded(
-              flex: 3,
-              child: Text(
-                'Compose',
-                softWrap: false,
-                style: TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold),
-              ),
-            );
+            _composeButtonText = _buildComposeButtonText();
           });
         }
       });
     super.initState();
+  }
+
+  Widget _buildComposeButtonText() {
+    return Expanded(
+      flex: 3,
+      child: Text(
+        'Compose',
+        softWrap: false,
+        style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold),
+      ),
+    );
   }
 
   @override
@@ -84,11 +91,15 @@ class _GmailPageState extends State<GmailPage> {
               _searchBarWidth = MediaQuery.of(context).size.width;
               _searchBarBorderRadius = 0.0;
               _searchBarTopPosition = 0.0;
+              _searchBarLeftIconButton = _createBackIconButton();
+              _searchBarRightIconButton = _createMicrophoneIconButton();
             } else {
               _searchBarHeight = 50;
               _searchBarWidth = 380;
               _searchBarBorderRadius = 10;
               _searchBarTopPosition = 10;
+              _searchBarLeftIconButton = _createMenuIconButton();
+              _searchBarRightIconButton = _createCircularAvatar();
             }
           });
         },
@@ -110,9 +121,15 @@ class _GmailPageState extends State<GmailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.apps),
-                        onPressed: () {},
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        transitionBuilder: (widget, animation) {
+                          return RotationTransition(
+                            turns: Tween(begin: 0.5, end: 0.0).animate(animation),
+                            child: widget,
+                          );
+                        },
+                        child: _searchBarLeftIconButton,
                       ),
                       Expanded(
                         child: Text(
@@ -120,9 +137,15 @@ class _GmailPageState extends State<GmailPage> {
                           style: TextStyle(fontSize: 14.0),
                         ),
                       ),
-                      CircleAvatar(
-                        child: Text('EN'),
-                      )
+                      AnimatedSwitcher(
+                          transitionBuilder: (widget, animation) {
+                            return ScaleTransition(
+                              scale: animation,
+                              child: widget,
+                            );
+                          },
+                          duration: Duration(milliseconds: 200),
+                          child: _searchBarRightIconButton)
                     ],
                   ),
                 ),
@@ -189,6 +212,35 @@ class _GmailPageState extends State<GmailPage> {
         );
       },
       itemCount: 30,
+    );
+  }
+
+  static Widget _createMenuIconButton() {
+    return IconButton(
+      key: ValueKey(Icons.mail.hashCode),
+      icon: Icon(Icons.mail),
+      onPressed: () {},
+    );
+  }
+
+  static Widget _createBackIconButton() {
+    return IconButton(
+      key: ValueKey(Icons.arrow_back.hashCode),
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {},
+    );
+  }
+
+  static Widget _createCircularAvatar() {
+    return CircleAvatar(
+      child: Text('EN'),
+    );
+  }
+
+  static Widget _createMicrophoneIconButton() {
+    return IconButton(
+      onPressed: () {},
+      icon: Icon(Icons.mic_none),
     );
   }
 }
