@@ -99,9 +99,35 @@ class _GmailPageState extends State<GmailPage> {
             width: _searchBarWidth,
             height: _searchBarHeight,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(_searchBarBorderRadius),
-                color: Colors.white,
-                border: Border.all(color: Colors.grey, width: 1.0)),
+              borderRadius: BorderRadius.circular(_searchBarBorderRadius),
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 1.0),
+            ),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.apps),
+                        onPressed: () {},
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Search in mail',
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                      ),
+                      CircleAvatar(
+                        child: Text('EN'),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
