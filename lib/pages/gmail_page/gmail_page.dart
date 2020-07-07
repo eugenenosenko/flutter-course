@@ -11,12 +11,48 @@ class _GmailPageState extends State<GmailPage> {
   double _composeButtonWidth = 50.0;
   double _searchBarTopPosition = 10.0;
   Widget _composeButtonText = Container();
-  Widget _searchBarLeftIconButton = _createMenuIconButton();
-  Widget _searchBarRightIconButton = _createCircularAvatar();
-
   double _searchBarWidth = 380.0;
   double _searchBarHeight = 50.0;
   double _searchBarBorderRadius = 10.0;
+  Widget _searchBarLeadingWidget = _buildLeadingSearchBarWidget(true);
+  Widget _searchBarTrailingWidget = _buildTrailingSearchBarWidget(true);
+
+  static Widget _buildLeadingSearchBarWidget(bool isDefault) {
+    return AnimatedSwitcher(
+      transitionBuilder: (widget, animation){
+        return RotationTransition(
+          turns: Tween<double>(begin: -0.25, end: 0.0).animate(animation),
+          child: widget,
+        );
+      },
+      duration: Duration(milliseconds: 200),
+      child: isDefault
+          ? IconButton(
+        key: UniqueKey(),
+        onPressed: () {},
+        icon: Icon(Icons.menu),
+      )
+          : IconButton(
+        key: UniqueKey(),
+        onPressed: () {},
+        icon: Icon(Icons.arrow_back),
+      ),
+    );
+  }
+
+  static Widget _buildTrailingSearchBarWidget(bool isDefault) {
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 200),
+      child: isDefault
+          ? CircleAvatar(
+        child: Text('EN'),
+      )
+          : IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.mic_none),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -34,25 +70,21 @@ class _GmailPageState extends State<GmailPage> {
           setState(() {
             _searchBarTopPosition = 10.0;
             _composeButtonWidth = 150;
-            _composeButtonText = _buildComposeButtonText();
+            _composeButtonText = Expanded(
+              flex: 3,
+              child: Text(
+                'Compose',
+                softWrap: false,
+                style: TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            );
           });
         }
       });
     super.initState();
-  }
-
-  Widget _buildComposeButtonText() {
-    return Expanded(
-      flex: 3,
-      child: Text(
-        'Compose',
-        softWrap: false,
-        style: TextStyle(
-            color: Colors.redAccent,
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold),
-      ),
-    );
   }
 
   @override
@@ -91,15 +123,15 @@ class _GmailPageState extends State<GmailPage> {
               _searchBarWidth = MediaQuery.of(context).size.width;
               _searchBarBorderRadius = 0.0;
               _searchBarTopPosition = 0.0;
-              _searchBarLeftIconButton = _createBackIconButton();
-              _searchBarRightIconButton = _createMicrophoneIconButton();
+              _searchBarLeadingWidget = _buildLeadingSearchBarWidget(false);
+              _searchBarTrailingWidget = _buildTrailingSearchBarWidget(false);
             } else {
               _searchBarHeight = 50;
               _searchBarWidth = 380;
               _searchBarBorderRadius = 10;
               _searchBarTopPosition = 10;
-              _searchBarLeftIconButton = _createMenuIconButton();
-              _searchBarRightIconButton = _createCircularAvatar();
+              _searchBarLeadingWidget = _buildLeadingSearchBarWidget(true);
+              _searchBarTrailingWidget = _buildTrailingSearchBarWidget(true);
             }
           });
         },
@@ -114,42 +146,19 @@ class _GmailPageState extends State<GmailPage> {
               color: Colors.white,
               border: Border.all(color: Colors.grey, width: 1.0),
             ),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                children: <Widget>[
+                  Row(
                     children: <Widget>[
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        transitionBuilder: (widget, animation) {
-                          return RotationTransition(
-                            turns: Tween(begin: 0.5, end: 0.0).animate(animation),
-                            child: widget,
-                          );
-                        },
-                        child: _searchBarLeftIconButton,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Search in mail',
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                      ),
-                      AnimatedSwitcher(
-                          transitionBuilder: (widget, animation) {
-                            return ScaleTransition(
-                              scale: animation,
-                              child: widget,
-                            );
-                          },
-                          duration: Duration(milliseconds: 200),
-                          child: _searchBarRightIconButton)
+                      _searchBarLeadingWidget,
+                      Expanded(child: Text('Search in mail')),
+                      _searchBarTrailingWidget,
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -212,35 +221,6 @@ class _GmailPageState extends State<GmailPage> {
         );
       },
       itemCount: 30,
-    );
-  }
-
-  static Widget _createMenuIconButton() {
-    return IconButton(
-      key: ValueKey(Icons.mail.hashCode),
-      icon: Icon(Icons.mail, color: Colors.grey.shade600,),
-      onPressed: () {},
-    );
-  }
-
-  static Widget _createBackIconButton() {
-    return IconButton(
-      key: ValueKey(Icons.arrow_back.hashCode),
-      icon: Icon(Icons.arrow_back, color: Colors.grey.shade600,),
-      onPressed: () {},
-    );
-  }
-
-  static Widget _createCircularAvatar() {
-    return CircleAvatar(
-      child: Text('EN'),
-    );
-  }
-
-  static Widget _createMicrophoneIconButton() {
-    return IconButton(
-      onPressed: () {},
-      icon: Icon(Icons.mic_none),
     );
   }
 }
