@@ -18,7 +18,7 @@ class _MyAnimatedSwitcherState extends State<MyAnimatedSwitcher> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(seconds: 4), (timer) {
+    _timer = Timer.periodic(const  Duration(seconds: 4), (timer) {
       setState(() {
         print('${timer.tick}');
         _child = MyContainer(
@@ -44,16 +44,19 @@ class _MyAnimatedSwitcherState extends State<MyAnimatedSwitcher> {
                 final offsetAnimation = TweenSequence([
                   TweenSequenceItem(
                       tween: Tween<Offset>(
-                          begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0)),
+                        begin: const Offset(0.0, 1.0),
+                        end: const Offset(0.0, 0.0),
+                      ),
                       weight: 1),
                   TweenSequenceItem(
-                      tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
+                      tween: ConstantTween(const Offset(0.0, 0.0)), weight: 2),
                   TweenSequenceItem(
                       tween: Tween<Offset>(
-                          begin: Offset(0.0, 0.0), end: Offset(0.0, -1.0)),
+                        begin: const Offset(0.0, 0.0),
+                        end: const Offset(0.0, -1.0),
+                      ),
                       weight: 1)
                 ]).animate(animation);
-
                 return SlideTransition(
                   position: offsetAnimation,
                   child: ClipRRect(
@@ -71,7 +74,7 @@ class _MyAnimatedSwitcherState extends State<MyAnimatedSwitcher> {
                   ),
                 );
               },
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
               child: _child)),
     );
   }

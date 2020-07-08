@@ -25,7 +25,7 @@ class _GmailPageState extends State<GmailPage> {
           child: widget,
         );
       },
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       child: isDefault
           ? IconButton(
         key: UniqueKey(),
@@ -42,9 +42,9 @@ class _GmailPageState extends State<GmailPage> {
 
   static Widget _buildTrailingSearchBarWidget(bool isDefault) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       child: isDefault
-          ? CircleAvatar(
+          ? const CircleAvatar(
         child: Text('EN'),
       )
           : IconButton(
@@ -96,13 +96,19 @@ class _GmailPageState extends State<GmailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            _buildEmailTiles(),
-            _buildComposeButton(),
-            _buildSearchBar()
-          ],
+      body: RefreshIndicator(
+        onRefresh: () {
+          return Future.delayed(const Duration(milliseconds: 2000));
+        } ,
+        displacement: 150,
+        child: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              _buildEmailTiles(),
+              _buildComposeButton(),
+              _buildSearchBar()
+            ],
+          ),
         ),
       ),
     );
@@ -110,7 +116,7 @@ class _GmailPageState extends State<GmailPage> {
 
   Widget _buildSearchBar() {
     return AnimatedPositioned(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       top: _searchBarTopPosition,
       left: 0,
       right: 0,
@@ -138,7 +144,7 @@ class _GmailPageState extends State<GmailPage> {
         child: Align(
           alignment: Alignment.topCenter,
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             width: _searchBarWidth,
             height: _searchBarHeight,
             decoration: BoxDecoration(
@@ -153,7 +159,7 @@ class _GmailPageState extends State<GmailPage> {
                   Row(
                     children: <Widget>[
                       _searchBarLeadingWidget,
-                      Expanded(child: Text('Search in mail')),
+                      const Expanded(child: Text('Search in mail')),
                       _searchBarTrailingWidget,
                     ],
                   ),
@@ -171,7 +177,7 @@ class _GmailPageState extends State<GmailPage> {
       bottom: 40,
       right: 50,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         width: _composeButtonWidth,
         height: 50,
         decoration: BoxDecoration(
@@ -203,20 +209,21 @@ class _GmailPageState extends State<GmailPage> {
 
   Widget _buildEmailTiles() {
     return ListView.builder(
+      physics: const BouncingScrollPhysics(),
       controller: _controller,
       itemBuilder: (_, int index) {
         if (index == 0) {
-          return SizedBox(height: 70);
+          return const SizedBox(height: 70);
         }
 
         return ListTile(
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             child: Text('A'),
           ),
-          title: Text('Email Title'),
-          subtitle: Text('Short email description'),
+          title: const Text('Email Title'),
+          subtitle: const Text('Short email description'),
           trailing: Column(
-            children: <Widget>[Text('Jul 1'), Icon(Icons.star_border)],
+            children: <Widget>[const Text('Jul 1'), Icon(Icons.star_border)],
           ),
         );
       },

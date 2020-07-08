@@ -4,11 +4,11 @@ class BookingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 100.0,
         vertical: 25.0,
       ),
-      color: Color(0xff4F2EFA),
+      color: const Color(0xff4F2EFA),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
