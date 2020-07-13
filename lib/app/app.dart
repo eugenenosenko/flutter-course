@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutterportoflioapp/pages/my_animated_switcher/my_animated_switcher.dart';
 
  import 'package:flutterportoflioapp/pages/gmail_page/gmail_page.dart';
+import 'package:flutterportoflioapp/pages/lab_page/lab_page.dart';
 
 class AppWrapper extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class _MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
-      home: GmailPage(),
+      home: LabPage(),
     );
   }
 }
