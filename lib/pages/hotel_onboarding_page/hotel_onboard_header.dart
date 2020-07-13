@@ -5,7 +5,7 @@ class HotelOnboardingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.30,
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
@@ -31,7 +31,7 @@ class HotelOnboardingHeader extends StatelessWidget {
             quarterTurns: 1,
             child: RichText(
               text: TextSpan(children: [
-                TextSpan(
+                const  TextSpan(
                   text: 'DEFINING ',
                   style: TextStyle(fontSize: 14.0, letterSpacing: 1.2),
                 ),

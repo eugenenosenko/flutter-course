@@ -12,7 +12,7 @@ class HotelOnBoardingPage extends StatelessWidget {
       body: Column(
         children: <Widget>[
           HotelOnBoardingContent(),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           BookingButton()
         ],
       ),
@@ -26,11 +26,9 @@ class HotelOnBoardingContent extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       color: Colors.black,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       shadowColor: Colors.grey.withOpacity(0.3),
-      margin: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(10.0),
       elevation: 15,
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -89,7 +87,12 @@ class _HotelOnBoardPageViewState extends State<HotelOnBoardPageView> {
         child: Stack(
           children: <Widget>[
             HotelImage(),
-            HotelOnboardingScrollableContentArea(_controller),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: HotelOnboardingScrollableContentArea(_controller),
+              ),
+            ),
           ],
         ),
       ),
@@ -100,49 +103,125 @@ class _HotelOnBoardPageViewState extends State<HotelOnBoardPageView> {
 class HotelOnboardingScrollableContentArea extends StatelessWidget {
   final PageController _controller;
 
-  HotelOnboardingScrollableContentArea(this._controller);
+  const HotelOnboardingScrollableContentArea(this._controller);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 20.0,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15.0),
+      color: Colors.white,
+      height: 250,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (OverscrollIndicatorNotification overScroll) {
+                  overScroll.disallowGlow();
+                  return false;
+                },
+                child: _buildPageView()),
           ),
-          height: 250,
-          decoration: BoxDecoration(
-            border: Border(
-                top: BorderSide(
-              color: Colors.grey,
-              width: 1.0,
-            )),
-            color: Colors.white,
-          ),
-          child: NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (OverscrollIndicatorNotification overScroll) {
-              overScroll.disallowGlow();
-              return false;
-            },
-            child: _buildPageView()
-          ),
-        ),
-      ],
+          Expanded(flex: 1, child: PageProgressBar())
+        ],
+      ),
     );
   }
 
   PageView _buildPageView() {
     return PageView(
       controller: _controller,
-      physics: ClampingScrollPhysics(),
-      children: [
+      physics: const ClampingScrollPhysics(),
+      children: const [
         PageCard(index: 0),
         PageCard(index: 1),
         PageCard(index: 2),
       ],
     );
+  }
+}
+
+class PageProgressBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: const [
+        PageIndicator(0),
+        PageIndicator(1),
+        PageIndicator(2),
+      ],
+    );
+  }
+}
+
+class PageIndicator extends StatelessWidget {
+  final double index;
+
+  const PageIndicator(this.index);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<PageControllerNotifier>(builder: (_, notifier, child) {
+      return Stack(
+        children: <Widget>[
+          Container(
+            width: 95,
+            height: 3,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(40.0),
+            ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: _calculateWidth(notifier.page),
+            height: 3,
+            color: const Color(0xff4F2EFA),
+          )
+        ],
+      );
+    });
+  }
+
+  double _calculateWidth(double page) {
+    if (index == page) {
+      return 95;
+    }
+
+    if (page >= index + 0.1) {
+      return 0;
+    }
+
+    if (page + 0.1 >= index) {
+      return 95;
+    }
+
+    return 0;
+  }
+
+  double _calculateOpacity(double page) {
+    if (index == page) {
+      return 1;
+    }
+
+    if (page >= index + 0.1) {
+      return 0;
+    }
+
+    if (page + 0.1 >= index) {
+      return 1;
+    }
+
+    return 0;
+  }
+}
+
+class GmailAppHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
@@ -154,38 +233,11 @@ class PageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final page = Provider.of<PageControllerNotifier>(context).page;
-    print('$page');
-
     return AnimatedOpacity(
       curve: Curves.easeIn,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       opacity: _calculateOpacity(page),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Experience Luxury\n\n',
-              style: TextStyle(
-                fontSize: 32.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            TextSpan(
-              text: '''
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 
-              '''
-                  .trimLeft(),
-              style: TextStyle(
-                height: 1.6,
-                fontSize: 15.0,
-                wordSpacing: 2.0,
-                color: Colors.grey.shade600,
-              ),
-            )
-          ],
-        ),
-      ),
+      child: const PageText(),
     );
   }
 
@@ -203,5 +255,42 @@ class PageCard extends StatelessWidget {
     }
 
     return 0;
+  }
+}
+
+class PageText extends StatelessWidget {
+  const PageText({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+      child: RichText(
+        text: const TextSpan(
+          children: [
+            TextSpan(
+              text: 'Experience Luxury\n\n',
+              style: TextStyle(
+                fontSize: 32.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            TextSpan(
+              text:
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the',
+              style: TextStyle(
+                height: 1.6,
+                fontSize: 15.0,
+                wordSpacing: 2.0,
+                color: Colors.grey,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

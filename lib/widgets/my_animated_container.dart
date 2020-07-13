@@ -20,7 +20,7 @@ class _MyAnimatedContainerState extends State<MyAnimatedContainer> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const  Duration(seconds: 1), (timer) {
       setState(() {
         _height = _random.nextInt(300).toDouble();
         _width = _random.nextInt(100).toDouble();
@@ -39,7 +39,7 @@ class _MyAnimatedContainerState extends State<MyAnimatedContainer> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       width: _width,
       height: _height,
       decoration: BoxDecoration(

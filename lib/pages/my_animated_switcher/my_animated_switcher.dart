@@ -8,12 +8,12 @@ class MyAnimatedSwitcherPage extends StatefulWidget {
 }
 
 class _MyAnimatedSwitcherPageState extends State<MyAnimatedSwitcherPage> {
-  Widget _child = _MyContainer();
+  Widget _child = const  _MyContainer();
   Timer _timer;
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(const  Duration(seconds: 5), (timer) {
       setState(() {
         print('${timer.tick}'); // 1 2 3 4 5
         _child = _MyContainer(
@@ -53,7 +53,7 @@ class _MyAnimatedSwitcherPageState extends State<MyAnimatedSwitcherPage> {
               ),
             );
           },
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           child: _child,
         ),
       ),
